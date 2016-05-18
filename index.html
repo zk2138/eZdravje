@@ -43,12 +43,31 @@
   <!-- ZAČETEK: Vsebina aplikacije -->
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
+      <div class="col-lg-12 text-center" style="height: 60vh">
         <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
-        <select name="nacin">
+        <!--
+        <select id="nacin">
+          <option>Izberi način vnosa pacienta</option>
           <option value="0">Generiraj paciente</option>
           <option value="1">Vpiši podatke</option>
         </select>
+        //-->
+        <div class="dropdown">
+        <button onclick="izbiraNacina()" class="dropbtnI">Izberi način vnosa podatkov</button>
+        <div id="nacin" class="dropdown-contentI">
+          <a href="#" onclick="izbira(0)">Generiraj paciente</a>
+          <a href="#" onclick="izbira(1)">Vpiši svoje podatke</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button onclick="izbiraPacienta()" class="dropbtnP" id="pacienti">Pacienti</button>
+        <div id="pacient" class="dropdown-contentP">
+          <a href="#">Janez JJ Janša</a>
+          <a href="#">Damir Murkić</a>
+        </div>
+      </div>
+      
       </div>
     </div>
   </div>

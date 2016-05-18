@@ -20,7 +20,9 @@ function getSessionId() {
     });
     return response.responseJSON.sessionId;
 }
-ehrIdTab = [];
+
+var ehrIdTab = [];
+
 function generirajZacetne3Uporabnike() {
     for(i=1; i <= 3; i++) {
         ehr = generirajPodatke(i);
@@ -34,6 +36,7 @@ function generirajZacetne3Uporabnike() {
         //ehrIdTab.push(ehr);
     }
     */
+    
 }
 
 
@@ -60,3 +63,74 @@ function generirajPodatke(stPacienta) {
 
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
+
+/**
+ *  Dropdown menu code 
+ */
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function izbiraNacina() {
+    document.getElementById("nacin").classList.toggle("show");
+}
+
+function izbiraPacienta() {
+    document.getElementById("pacient").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtnI') && !event.target.matches('.dropbtnP')) {
+
+    var dropdownsI = document.getElementsByClassName("dropdown-contentI");
+    var dropdownsP = document.getElementsByClassName("dropdown-contentP");
+    var i;
+    for (i = 0; i < dropdownsI.length; i++) {
+      var openDropdown = dropdownsI[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+    for (i = 0; i < dropdownsP.length; i++) {
+      var openDropdown = dropdownsP[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  } 
+  else if (!event.target.matches('.dropbtnI')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-contentI");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  } 
+  else if (!event.target.matches('.dropbtnP')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-contentP");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+function izbira(stNacina) {
+    if(stNacina == 0) {
+        //TODO: funkcija za generiranje 3
+        generirajZacetne3Uporabnike();
+        console.log( "Generiraj podatke" );
+        //alert( "Generiraj podatke" );
+    }
+    else if(stNacina == 1) {
+        //TODO: funkcija za vnos podatkov
+        console.log( "Vnesite podatke" );
+        //alert( "Vnesite podatke" );
+    }
+}
