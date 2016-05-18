@@ -20,6 +20,21 @@ function getSessionId() {
     });
     return response.responseJSON.sessionId;
 }
+ehrIdTab = [];
+function generirajZacetne3Uporabnike() {
+    for(i=1; i <= 3; i++) {
+        ehr = generirajPodatke(i);
+        //console.log(ehr);
+        ehrIdTab.push(ehr);
+    }
+    /*
+    for(i=0; i <= 2; i++) {
+        //ehr = generirajPodatke(i);
+        console.log(ehrIdTab[i]);
+        //ehrIdTab.push(ehr);
+    }
+    */
+}
 
 
 /**
@@ -31,11 +46,16 @@ function getSessionId() {
  * @return ehrId generiranega pacienta
  */
 function generirajPodatke(stPacienta) {
-  ehrId = "";
-
-  // TODO: Potrebno implementirati
-
-  return ehrId;
+    ehrId = "";
+    
+    // TODO: Potrebno implementirati
+    if(stPacienta === 1)
+        ehrId = "123456";
+    else if(stPacienta === 2)
+        ehrId = "234567";
+    else if(stPacienta === 3)
+        ehrId = "345678";
+    return ehrId;
 }
 
 
