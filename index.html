@@ -14,6 +14,7 @@
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
   <script src="knjiznice/js/zemljevid.js"></script>
+  <script src="knjiznice/js/generirajZacetek.js"></script>
 </head>
 <body>
 
@@ -33,7 +34,7 @@
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li onclick = "kreirajEHRzaBolnika()"><a href="#">Generiranje podatkov</a></li>
+          <li onclick = "generirajZacetne3Uporabnike()"><a href="#">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -41,7 +42,7 @@
   <!-- KONEC: Menujska vrstica na vrhu spletne strani -->
 
   <!-- ZAČETEK: Vsebina aplikacije -->
-  <div class="container" style="width:100vw">
+  <div class="container" style="width:99vw">
     <div class="row">
       <!-- ZAČETEK: DROPDOWN -->
       <div class="col-lg-12 text-center">
@@ -60,8 +61,8 @@
         <div class="dropdown">
           <button onclick="izbiraPacienta()" class="dropbtnP" id="pacienti">Pacienti</button>
           <div id="pacient" class="dropdown-contentP">
-            <a href="#">Janez JJ Janša</a>
-            <a href="#">Damir Murkić</a>
+            <!-- tu se nahajajo imena in ehr vnešenih pacientov -->
+            '<a href="#" onclick="vnesiEHRID('3c532d12-6b64-21ad-c29e-2dc9f5a3d885')">Janez Janša</a>
           </div>
         </div>
       </div>

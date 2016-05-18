@@ -5,6 +5,7 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
+var sessionT = null;
 
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
@@ -12,6 +13,9 @@ var password = "ois4fri";
  * @return enolični identifikator seje za dostop do funkcionalnosti
  */
 function getSessionId() {
+    if(sessionT != null)
+      return sessionT;
+    
     var response = $.ajax({
         type: "POST",
         url: baseUrl + "/session?username=" + encodeURIComponent(username) +
@@ -36,6 +40,13 @@ function generirajZacetne3Uporabnike() {
         //ehrIdTab.push(ehr);
     }
     */
+    var sporocilo = "<span class='obvestilo " +
+                          "label label-success fade-in'>Uspešno kreirani EHR: <br />";
+    for(i=0; i < 3; i++) {
+      sporocilo += ehrIdTab[i] + "<br /> ";
+    }
+    sporocilo +=  "</span>";
+    $("#sporociloB").html(sporocilo);
     
 }
 
@@ -52,21 +63,27 @@ function generirajPodatke(stPacienta) {
     ehrId = "";
     
     // TODO: Potrebno implementirati
-    if(stPacienta === 1)
-        ehrId = "123456";
-    else if(stPacienta === 2)
-        ehrId = "234567";
-    else if(stPacienta === 3)
-        ehrId = "345678";
+    if(stPacienta === 1) {
+        ehrId = zacetniEHRzaPacienta("Janez", "Janša", "1975-06-13T01:25");
+        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Janez Janša</a>');
+    } else if(stPacienta === 2) {
+        ehrId = zacetniEHRzaPacienta("Bolnik", "Bolni", "1965-06-12T01:25");
+        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Bolnik Bolni</a>');
+    }else if(stPacienta === 3) {
+        ehrId = zacetniEHRzaPacienta("Polomljeni", "Bumbar", "2003-06-13T01:25");
+        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Polomljeni Bumbar</a>');
+    }
     return ehrId;
 }
 
 function EHRzaPacienta() {
 	sessionId = getSessionId();
-
+  var ehrId = null;
 	var ime = $("#vpisiIme").val();
 	var priimek = $("#vpisiPriimek").val();
 	var datumRojstva = $("#vpisiDatumR").val();
+	
+	console.log(ime + " " + priimek + " " + datumRojstva);
 
 	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
       priimek.trim().length == 0 || datumRojstva.trim().length == 0) {
@@ -79,8 +96,9 @@ function EHRzaPacienta() {
 		$.ajax({
 		    url: baseUrl + "/ehr",
 		    type: 'POST',
+		    async: false,
 		    success: function (data) {
-		        var ehrId = data.ehrId;
+		        ehrId = data.ehrId;
 		        var partyData = {
 		            firstNames: ime,
 		            lastNames: priimek,
@@ -92,12 +110,14 @@ function EHRzaPacienta() {
 		            type: 'POST',
 		            contentType: 'application/json',
 		            data: JSON.stringify(partyData),
+		            async: false,
 		            success: function (party) {
 		                if (party.action == 'CREATE') {
 		                    $("#sporociloP").html("<span class='obvestilo " +
                           "label label-success fade-in'>Uspešno kreiran EHR '" +
                           ehrId + "'.</span>");
 		                    $("#ehrIdP").val(ehrId);
+		                    $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">' + ime + ' ' + priimek + '</a>');
 		                }
 		            },
 		            error: function(err) {
@@ -107,6 +127,40 @@ function EHRzaPacienta() {
 		            }
 		        });
 		    }
+		});
+	}
+}
+
+
+function vnesiEHRID(ehrId) {
+  $("#ehrIdP").val(ehrId);
+}
+
+function pridobiEhrPacienta() {
+	sessionId = getSessionId();
+
+	var ehrId = $("#preberiEHRid").val();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#preberiSporocilo").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-success fade-in'>Bolnik '" + party.firstNames + " " +
+          party.lastNames + "', ki se je rodil '" + party.dateOfBirth +
+          "'.</span>");
+			},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
 		});
 	}
 }

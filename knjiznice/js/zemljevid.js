@@ -44,7 +44,7 @@ function getLocation(setup) {
         ustanove = "Ustanove za pomoč v bližini";
         $('.panel-title').text(ustanove);
         deleteMarkers();
-        console.log("neki dela");
+        //console.log("neki dela");
     }
     
     if (navigator.geolocation) {
