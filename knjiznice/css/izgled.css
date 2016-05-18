@@ -3,8 +3,8 @@
 .dropbtnI, .dropbtnP {
     background-color: #4CAF50;
     color: white;
-    padding: 16px;
-    font-size: 16px;
+    padding: 12px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
 }
@@ -19,7 +19,19 @@
     position: relative;
     float: center;
     padding-right: 10px;
+    padding-bottom: 10px;
     display: inline-block;
+    z-index: 1;
+}
+
+.dodaj, .beri, .vpisiMeritevPacient {
+    position: relative;
+    float: right;
+    margin-top: 4px;
+    background-color: #4CAF50;
+    color: white;
+    font-family: Comic Sans MS;
+    border: none;
 }
 
 #pacienti {
