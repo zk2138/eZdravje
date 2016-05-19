@@ -5,11 +5,11 @@ var infowindow;
 var iAt = null;
 var markers = [];
 
-var rad = '1300';
-var type = ["hospital", "health"];
+var rad = '4000';
+var type = ["park", "cafe", "stadium"];
 //pharmacy, physiotherapist, spa, dentist
-var ustanove = "Zdravstvene ustanove v bližini";
-var defSetup = 1;
+var ustanove = "Prostočasne ustanove v bližini";
+var defSetup = 0;
 
 function initialize() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -24,25 +24,32 @@ google.maps.event.addDomListener(window, 'load', initialize);
 getLocation(defSetup);
 
 function getLocation(setup) {
-    if(setup == 1) {
+    //console.log("klicanje");
+    if(setup == 0) {
+        type = ["park", "cafe", "stadium"];
+        rad = '4000';
+        ustanove = "Prostočasne ustanove v bližini";
+        $('#panel-title-zemljevid').text(ustanove);
+        deleteMarkers();
+    }else if(setup == 1) {
         type = ["hospital", "health"];
         rad = '1300';
         ustanove = "Zdravstvene ustanove v bližini";
-        $('.panel-title').text(ustanove);
+        $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
     } else if(setup == 2) {
         type = ["spa"];
         //type = ["cafe", "library"];
         rad = '3000';
         ustanove = "Sprostilne ustanove v bližini";
-        $('.panel-title').text(ustanove);
+        $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
         //console.log("neki dela");
     } else if(setup == 3) {
         type = ["pharmacy", "physiotherapist", "dentist"];
         rad = '1800';
         ustanove = "Ustanove za pomoč v bližini";
-        $('.panel-title').text(ustanove);
+        $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
         //console.log("neki dela");
     }

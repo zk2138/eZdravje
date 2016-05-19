@@ -112,7 +112,7 @@
     
     <div class="row">
       <!-- ZAČETEK: Meritve pacienta -->
-      <div class="col-lg-12 col-md-12 col-sm-12" style="z-index:-1">
+      <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -121,7 +121,7 @@
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-6 col-md-6 col-sm-6" style="z-index:0">
+                <div class="col-lg-6 col-md-6 col-sm-6">
                   <span class="label label-default">EHR ID</span>
                   <input id="vpisiEhrId" type="text" class="form-control input-mini" placeholder="3c532d12-6b64-21ad-c29e-2dc9f5a3d885">
                   <span class="label label-default">Datum meritve</span>
@@ -140,7 +140,7 @@
       						</div>
                 </div>
                 
-                <div class="col-lg-6 col-md-6 col-sm-6" style="z-index:0">
+                <div class="col-lg-6 col-md-6 col-sm-6">
                   <span class="label label-default">Sistolični krvni tlak</span>
                   <div class="input-group">
                     <input id="vpisiSisTlak" type="text" class="form-control input-mini" placeholder="120"><span class="input-group-addon">mm Hg</span>
@@ -165,20 +165,56 @@
         </div>
       </div>
       <!-- KONEC: Meritve pacienta -->
-  
+    </div>
+    
+    <div class="row">
+      <!-- ZAČETEK: Počutje in opis problema -->
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Počutje in opis težav pacienta</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                  <form role="form">
+                    <label class="radio-inline"><input type="radio" name="optradio" checked="checked" onclick="getLocation(0);">Spočit</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(2);">Utrujen</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(3);">Bolečina</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(1);">Poškodba</label>
+                  </form>
+                </div>
+                
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                  <!-- tu bo polje za opis problema -->
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- KONEC: Počutje in opis problema -->
+    </div>
+    
   </div>
-  
   <!-- KONEC: Vsebina aplikacije -->
+  
+  <!-- ZAĆETEK: Zemljevid -->
   <div class="col-md-12">
       <div class="panel panel-default">
           <div class="panel-heading">
-              <h3 class="panel-title">Zdravstvene ustanove v bližini</h3>
+              <h3 class="panel-title" id="panel-title-zemljevid">Prostočasne ustanove v bližini</h3>
           </div>
           <div class="panel-body">
               <div id="map" style="height: 280px"></div>
           </div>
       </div>
   </div>
-
+  <!-- KONEC: Zemljevid -->
+  
 </body>
 </html>
