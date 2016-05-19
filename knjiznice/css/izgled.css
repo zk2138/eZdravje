@@ -1,6 +1,6 @@
 
 /* Dropdown Button */
-.dropbtnI, .dropbtnP {
+.dropbtnI, .dropbtnP, .vrniNazaj {
     background-color: #4CAF50;
     color: white;
     padding: 12px;
@@ -10,12 +10,13 @@
 }
 
 /* Dropdown button on hover & focus */
-.dropbtnI:hover, .dropbtnI:focus, .dropbtnP:hover, .dropbtnP:focus {
+.dropbtnI:hover, .dropbtnI:focus, .dropbtnP:hover, .dropbtnP:focus, 
+.vrniNazaj:hover, .vrniNazaj:focus {
     background-color: #3e8e41;
 }
 
 /* The container <div> - needed to position the dropdown content */
-.dropdown {
+.dropdown, .vrniNazaj {
     position: relative;
     float: center;
     padding-right: 10px;
@@ -35,7 +36,7 @@
     border: none;
 }
 
-#pacienti {
+#pacienti, .vrniNazaj {
     width: 200px;
 }
 

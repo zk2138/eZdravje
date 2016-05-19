@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>eZdravje :: 4. DN :: OIS 2015/2016</title>
+  <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
+  <link href="knjiznice/css/izgled.css" rel="stylesheet">
+  <style>
+    body {padding-top: 70px;}
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+  <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
+  <script src="knjiznice/js/bootstrap.min.js"></script>
+  <script src="knjiznice/js/koda.js"></script>
+  <script src="knjiznice/js/zemljevid.js"></script>
+  <script src="knjiznice/js/generirajZacetek.js"></script>
+</head>
+<body>
+
+  <!-- ZAČETEK: Menujska vrstica na vrhu spletne strani -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menujska-vrstica">
+          <span class="sr-only">Prikaži menu</span>
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+        <!-- ZAČETEK: Ime vaše aplikacije -->
+        <a class="navbar-brand" href="index.html">{ime vaše aplikacije}</a>
+        <!-- KONEC: Ime vaše aplikacije -->
+      </div>
+      <div class="collapse navbar-collapse" id="menujska-vrstica">
+        <ul class="nav navbar-nav">
+          <li><a href="opis.html">Opis ideje</a></li>
+          <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
+          <li onclick = "getLocation(3)"><a href="#">Generiranje podatkov</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- KONEC: Menujska vrstica na vrhu spletne strani -->
+
+  <!-- ZAČETEK: Vsebina aplikacije -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="dropdown">
+          <button onclick="izbiraPacienta()" class="dropbtnP" id="pacienti">Pacienti</button>
+          <div id="pacient" class="dropdown-contentP">
+            <!-- tu se nahajajo imena in ehr vnešenih pacientov -->
+            '<a href="#" onclick="vnesiEHRID('3c532d12-6b64-21ad-c29e-2dc9f5a3d885')">Janez Janša</a>
+          </div>
+        </div>
+        <button onclick="location.href='index.html'" class="vrniNazaj">Nazaj na vnos</button>
+      </div>
+    </div>
+  </div>
+  <!-- KONEC: Vsebina aplikacije -->
+  
+  <!-- ZAČETEK: Zemljevid -->
+  <div class="col-md-12">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title" id="panel-title-zemljevid">Prostočasne ustanove v bližini</h3>
+          </div>
+          <div class="panel-body">
+              <div id="map" style="height: 280px"></div>
+          </div>
+      </div>
+  </div>
+  <!-- KONEC: Zemljevid -->
+
+</body>
+</html>
