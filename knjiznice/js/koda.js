@@ -28,6 +28,8 @@ function getSessionId() {
 var ehrIdTab = [];
 
 function generirajZacetne3Uporabnike() {
+  var sporocilo = "";
+  ehrIdTab = [];
     for(i=1; i <= 3; i++) {
         ehr = generirajPodatke(i);
         //console.log(ehr);
@@ -40,14 +42,16 @@ function generirajZacetne3Uporabnike() {
         //ehrIdTab.push(ehr);
     }
     */
-    var sporocilo = "<span class='obvestilo " +
-                          "label label-success fade-in'>Uspešno kreirani EHR: <br />";
+    sporocilo = "<span class='obvestilo label label-success fade-in'>Uspešno kreirani EHR: <br />";
     for(i=0; i < 3; i++) {
       sporocilo += ehrIdTab[i] + "<br /> ";
     }
     sporocilo +=  "</span>";
     $("#sporociloB").html(sporocilo);
     
+    setTimeout(function() {
+      $('#sporociloB').html('');
+    }, 15000);
 }
 
 
@@ -66,12 +70,17 @@ function generirajPodatke(stPacienta) {
     if(stPacienta === 1) {
         ehrId = zacetniEHRzaPacienta("Janez", "Janša", "1975-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Janez Janša</a>');
+        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     } else if(stPacienta === 2) {
         ehrId = zacetniEHRzaPacienta("Bolnik", "Bolni", "1965-06-12T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Bolnik Bolni</a>');
+        //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
+        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     }else if(stPacienta === 3) {
         ehrId = zacetniEHRzaPacienta("Polomljeni", "Bumbar", "2003-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Polomljeni Bumbar</a>');
+        //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
+        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     }
     return ehrId;
 }
@@ -116,6 +125,11 @@ function EHRzaPacienta() {
 		                    $("#sporociloP").html("<span class='obvestilo " +
                           "label label-success fade-in'>Uspešno kreiran EHR '" +
                           ehrId + "'.</span>");
+                          
+                          setTimeout(function() {
+                            $('#sporociloP').html("");
+                          }, 6000);
+                          
 		                    $("#ehrIdP").val(ehrId);
 		                    $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">' + ime + ' ' + priimek + '</a>');
 		                }
@@ -134,15 +148,16 @@ function EHRzaPacienta() {
 
 function vnesiEHRID(ehrId) {
   $("#ehrIdP").val(ehrId);
+  $("#vpisiEhrId").val(ehrId);
 }
 
 function pridobiEhrPacienta() {
 	sessionId = getSessionId();
 
-	var ehrId = $("#preberiEHRid").val();
+	var ehrId = $("#ehrIdP").val();
 
 	if (!ehrId || ehrId.trim().length == 0) {
-		$("#preberiSporocilo").html("<span class='obvestilo label label-warning " +
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
 	} else {
 		$.ajax({
@@ -151,10 +166,18 @@ function pridobiEhrPacienta() {
 			headers: {"Ehr-Session": sessionId},
 	    	success: function (data) {
 				var party = data.party;
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-success fade-in'>Bolnik '" + party.firstNames + " " +
           party.lastNames + "', ki se je rodil '" + party.dateOfBirth +
           "'.</span>");
+        
+        $("#vpisiIme").val(party.firstNames);
+      	$("#vpisiPriimek").val(party.lastNames);
+      	$("#vpisiDatumR").val(party.dateOfBirth);
+          
+        setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
 			},
 			error: function(err) {
 				$("#preberiSporocilo").html("<span class='obvestilo label " +

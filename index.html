@@ -101,7 +101,7 @@
             <div class="panel-body">
               <span class="label label-default">EHR ID</span>
               <input id="ehrIdP" type="text" class="form-control input-mini" placeholder="3c532d12-6b64-21ad-c29e-2dc9f5a3d885">
-              <button type="button" class="beri" /*onclick="EHRzaPacienta()"*/>Preberi podatke o pacientu</button><span id="sporociloB"></span>
+              <button type="button" class="beri" onclick="pridobiEhrPacienta()">Preberi podatke o pacientu</button><span id="sporociloB"></span>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
     
     <div class="row">
       <!-- ZAČETEK: Meritve pacienta -->
-      <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="col-lg-12 col-md-12 col-sm-12" style="z-index:-1">
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -121,7 +121,7 @@
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6" style="z-index:0">
                   <span class="label label-default">EHR ID</span>
                   <input id="vpisiEhrId" type="text" class="form-control input-mini" placeholder="3c532d12-6b64-21ad-c29e-2dc9f5a3d885">
                   <span class="label label-default">Datum meritve</span>
@@ -140,7 +140,7 @@
       						</div>
                 </div>
                 
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6" style="z-index:0">
                   <span class="label label-default">Sistolični krvni tlak</span>
                   <div class="input-group">
                     <input id="vpisiSisTlak" type="text" class="form-control input-mini" placeholder="120"><span class="input-group-addon">mm Hg</span>
