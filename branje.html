@@ -16,7 +16,7 @@
   <script src="knjiznice/js/zemljevid.js"></script>
   <script src="knjiznice/js/generirajZacetek.js"></script>
 </head>
-<body>
+<body onload="naloziPaciente();">
 
   <!-- ZAČETEK: Menujska vrstica na vrhu spletne strani -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -48,7 +48,6 @@
           <button onclick="izbiraPacienta()" class="dropbtnP" id="pacienti">Pacienti</button>
           <div id="pacient" class="dropdown-contentP">
             <!-- tu se nahajajo imena in ehr vnešenih pacientov -->
-            '<a href="#" onclick="vnesiEHRID('3c532d12-6b64-21ad-c29e-2dc9f5a3d885')">Janez Janša</a>
           </div>
         </div>
         <button onclick="location.href='index.html'" class="vrniNazaj">Nazaj na vnos</button>

@@ -44,7 +44,6 @@ function zacetniEHRzaPacienta(ime, priimek, datumRojstva) {
 	}
 }
 
-
 function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom,merilec) {
 	//console.log("klic funkcije");
 	sessionId = getSessionId();

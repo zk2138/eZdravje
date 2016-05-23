@@ -25,14 +25,18 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
+var ehrIdTemp = [];
 var ehrIdTab = [];
 
-function generirajZacetne3Uporabnike() {
+function generirajZacetne3UporabnikeOnLoad() {
+  if(ehrIdTab.length != 0)
+    return;
   var sporocilo = "";
-  ehrIdTab = [];
+  ehrIdTemp = [];
     for(i=1; i <= 3; i++) {
         ehr = generirajPodatke(i);
         //console.log(ehr);
+        ehrIdTemp.push(ehr);
         ehrIdTab.push(ehr);
     }
     /*
@@ -44,16 +48,57 @@ function generirajZacetne3Uporabnike() {
     */
     sporocilo = "<span class='obvestilo label label-success fade-in'>Uspešno kreirani EHR: <br />";
     for(i=0; i < 3; i++) {
-      sporocilo += ehrIdTab[i] + "<br /> ";
+      sporocilo += ehrIdTemp[i].ehrIdPac + "<br /> ";
     }
     sporocilo +=  "</span>";
     $("#sporociloB").html(sporocilo);
+    
+    i = 0;
+    while(ehrIdTab.length > i) {
+      console.log(ehrIdTab[i]);
+      i++;
+    }
     
     setTimeout(function() {
       $('#sporociloB').html('');
     }, 15000);
 }
 
+function generirajZacetne3Uporabnike() {
+  var sporocilo = "";
+  ehrIdTemp = [];
+    for(i=1; i <= 3; i++) {
+        ehr = generirajPodatke(i);
+        //console.log(ehr);
+        ehrIdTemp.push(ehr);
+        ehrIdTab.push(ehr);
+    }
+    /*
+    for(i=0; i <= 2; i++) {
+        //ehr = generirajPodatke(i);
+        console.log(ehrIdTab[i]);
+        //ehrIdTab.push(ehr);
+    }
+    */
+    sporocilo = "<span class='obvestilo label label-success fade-in'>Uspešno kreirani EHR: <br />";
+    for(i=0; i < 3; i++) {
+      sporocilo += ehrIdTemp[i].ehrIdPac + "<br /> ";
+    }
+    sporocilo +=  "</span>";
+    $("#sporociloB").html(sporocilo);
+    
+    i = 0;
+    while(ehrIdTab.length > i) {
+      console.log(ehrIdTab[i]);
+      i++;
+    }
+    
+    setTimeout(function() {
+      $('#sporociloB').html('');
+    }, 15000);
+}
+
+var podatkiPac;
 
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
@@ -65,24 +110,27 @@ function generirajZacetne3Uporabnike() {
  */
 function generirajPodatke(stPacienta) {
     ehrId = "";
-    
+    podatkiPac = "";
     // TODO: Potrebno implementirati
     if(stPacienta === 1) {
         ehrId = zacetniEHRzaPacienta("Janez", "Janša", "1975-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Janez Janša</a>');
+        podatkiPac = {ehrIdPac: ehrId, imePac: "Janez", priimekPac: "Janša"};
         zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     } else if(stPacienta === 2) {
-        ehrId = zacetniEHRzaPacienta("Bolnik", "Bolni", "1965-06-12T01:25");
-        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Bolnik Bolni</a>');
+        ehrId = zacetniEHRzaPacienta("Ana", "Karenina", "1965-06-12T01:25");
+        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Ana Karenina</a>');
+        podatkiPac = {ehrIdPac: ehrId, imePac: "Ana", priimekPac: "Karenina"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
         zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     }else if(stPacienta === 3) {
-        ehrId = zacetniEHRzaPacienta("Polomljeni", "Bumbar", "2003-06-13T01:25");
-        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Polomljeni Bumbar</a>');
+        ehrId = zacetniEHRzaPacienta("Amresh", "Linker", "2003-06-13T01:25");
+        $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Amresh Linker</a>');
+        podatkiPac = {ehrIdPac: ehrId, imePac: "Amresh", priimekPac: "Linker"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
         zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
     }
-    return ehrId;
+    return podatkiPac;
 }
 
 function EHRzaPacienta() {
@@ -91,6 +139,7 @@ function EHRzaPacienta() {
 	var ime = $("#vpisiIme").val();
 	var priimek = $("#vpisiPriimek").val();
 	var datumRojstva = $("#vpisiDatumR").val();
+	podatkiPac = "";
 	
 	console.log(ime + " " + priimek + " " + datumRojstva);
 
@@ -131,7 +180,9 @@ function EHRzaPacienta() {
                           }, 6000);
                           
 		                    $("#ehrIdP").val(ehrId);
-		                    $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">' + ime + ' ' + priimek + '</a>');
+		                    podatkiPac = {ehrIdPac: ehrId, imePac: ime, priimekPac: priimek};
+		                    ehrIdTab.push(podatkiPac);
+		                    naloziPaciente();
 		                }
 		            },
 		            error: function(err) {
@@ -204,6 +255,17 @@ function izbiraPacienta() {
     document.getElementById("pacient").classList.toggle("show");
 }
 
+function naloziPaciente() {
+  if(ehrIdTab.length == 0)
+    console.log("Ni pacientov");
+  x = 0;
+  $('#pacient').html("");
+  while(ehrIdTab.length > x) {
+     $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrIdTab[x].ehrIdPac + '\')">' + ehrIdTab[x].imePac + ' ' + ehrIdTab[x].priimekPac + '</a>');
+     x++;
+  }
+}
+
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtnI') && !event.target.matches('.dropbtnP')) {
@@ -248,16 +310,7 @@ window.onclick = function(event) {
   }
 }
 
-function izbira(stNacina) {
-    if(stNacina == 0) {
-        //TODO: funkcija za generiranje 3
-        generirajZacetne3Uporabnike();
-        console.log( "Generiraj podatke" );
-        //alert( "Generiraj podatke" );
-    }
-    else if(stNacina == 1) {
-        //TODO: funkcija za vnos podatkov
-        console.log( "Vnesite podatke" );
-        //alert( "Vnesite podatke" );
-    }
+function naloziPodatke() {
+  console.log("nalagam podatke");
+  $("#prikazPodatkov").html('');
 }
