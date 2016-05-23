@@ -32,6 +32,7 @@ function generirajZacetne3UporabnikeOnLoad() {
   if(ehrIdTab.length != 0)
     return;
   var sporocilo = "";
+  $("#prikazPodatkov").hide();
   ehrIdTemp = [];
     for(i=1; i <= 3; i++) {
         ehr = generirajPodatke(i);
@@ -217,17 +218,24 @@ function pridobiEhrPacienta() {
 			headers: {"Ehr-Session": sessionId},
 	    	success: function (data) {
 				var party = data.party;
-				$("#sporociloB").html("<span class='obvestilo label " +
-          "label-success fade-in'>Bolnik '" + party.firstNames + " " +
+				
+        setTimeout(function() {
+          naloziPodatke();
+        }, 200);
+        
+        $("#vrnisporociloP").html("<span class='obvestilo label " +
+          "label-success fade-in'>Uspešno naloženi podatki bolnika '" + party.firstNames + " " +
           party.lastNames + "', ki se je rodil '" + party.dateOfBirth +
           "'.</span>");
         
-        $("#vpisiIme").val(party.firstNames);
-      	$("#vpisiPriimek").val(party.lastNames);
-      	$("#vpisiDatumR").val(party.dateOfBirth);
+        $("#vrniIme").val(party.firstNames);
+      	$("#vrniPriimek").val(party.lastNames);
+      	$("#vrniDatumR").val(party.dateOfBirth);
+      	$("#vrniEhrIdP").val(ehrId);
+      	pridobiTezoinVisinoPacienta(ehrId);
           
         setTimeout(function() {
-          $('#sporociloB').html('');
+          $('#vrnisporociloP').html('');
         }, 15000);
 			},
 			error: function(err) {
@@ -310,7 +318,168 @@ window.onclick = function(event) {
   }
 }
 
+/**
+ * Funkciji za preklaplanje med prikazom in skrivanjem vnosnih polj in prikaza podatkov pacienta
+ */
 function naloziPodatke() {
   console.log("nalagam podatke");
-  $("#prikazPodatkov").html('');
+  $("#vnosPodatkov1").hide();
+  $("#vnosPodatkov2").hide();
+  $("#vnosPodatkov3").hide();
+  $("#prikazPodatkov").show();
+  $("#vrniGumb").show();
+}
+
+function nacin() {
+  console.log("vračam se na podatke");
+  $("#vnosPodatkov1").show();
+  $("#vnosPodatkov2").show();
+  $("#vnosPodatkov3").show();
+  $("#prikazPodatkov").hide();
+  $("#vrniGumb").hide();
+}
+
+
+function dodajMeritve() {
+	//console.log("klic funkcije");
+	sessionId = getSessionId();
+	
+	var ehrId = $("#vpisiEhrId").val();
+	var datumInUra = $("#vpisiDatumMeritev").val();
+	var telesnaVisina = $("#vpisiTelesnaVisna").val();
+	var telesnaTeza = $("#vpisiTeza").val();
+	var telesnaTemperatura = $("#vpisiTemperatura").val();
+	var sistolicniKrvniTlak = $("#vpisiSisTlak").val();
+	var diastolicniKrvniTlak = $("#vpisiDiaTlak").val();
+	var nasicenostKrviSKisikom = $("#vpisiKri").val();
+	var merilec = $("#vpisiMerilec").val();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloM").html("<span class='obvestilo " +
+      "label label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+	} else {
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		var podatki = {
+			// Struktura predloge je na voljo na naslednjem spletnem naslovu:
+      // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": datumInUra,
+		    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
+		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura,
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
+		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		    committer: merilec
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+		    	console.log("Uspešno dodani podatki");
+		    	$("#vpisiEhrId").val('');
+        	$("#vpisiDatumMeritev").val('');
+        	$("#vpisiTelesnaVisna").val('');
+        	$("#vpisiTeza").val('');
+        	$("#vpisiTemperatura").val('');
+        	$("#vpisiSisTlak").val('');
+        	$("#vpisiDiaTlak").val('');
+        	$("#vpisiKri").val('');
+        	$("#vpisiMerilec").val('');
+		    },
+		    error: function(err) {
+		    	$("#sporociloM").html(
+            "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		});
+	}
+}
+
+
+function pridobiTezoinVisinoPacienta(ehrId) {
+  sessionId = getSessionId();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				
+				//Telesna višina
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "height",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Telesna višina</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].height +
+                      " " + res[i].unit + "</td>";
+				        }
+				        results += "</table>";
+				        $("#visinaP").append(results);
+			    	} else {
+			    		alert("ni podatkov!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+				
+				//telesna teža
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "weight",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Telesna teža</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].weight +
+                      " " + res[i].unit + "</td>";
+				        }
+				        results += "</table>";
+				        $("#telesnaTezaP").append(results);
+			    	} else {
+			    		alert("ni podatkov!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+					
+			},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});
+	}
 }
