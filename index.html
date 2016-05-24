@@ -16,7 +16,7 @@
   <script src="knjiznice/js/zemljevid.js"></script>
   <script src="knjiznice/js/generirajZacetek.js"></script>
 </head>
-<body onload="generirajZacetne3UporabnikeOnLoad(); naloziPaciente();">
+<body onload="generirajZacetne3UporabnikeOnLoad(); naloziPaciente(); nacin();">
 
   <!-- ZAČETEK: Menujska vrstica na vrhu spletne strani -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -193,7 +193,7 @@
       <!-- KONEC: Počutje in opis problema -->
     </div>
     
-    <div class="row" id="prikazPodatkov">
+    <div class="row" id="prikazPodatkov1">
       <!-- ZAČETEK: Osnovni podatki z EHRID -->
       <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="col-md-12">
@@ -218,7 +218,7 @@
       <!-- KONEC: Osnovni podatki z EHRID -->
       
        <!-- ZAČETEK: VITALNI ZNAKI (teža in višina) -->
-      <div class="col-lg-6 col-md-6 col-sm-6" id="vnosPodatkov">
+      <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -241,6 +241,58 @@
         </div>
       </div>
       <!-- KONEC: VITALNI ZNAKI (teža in višina) -->
+    </div>
+    
+    <div class="row" id="prikazPodatkov2">
+      <!-- ZAČETEK: VITALNI ZNAKI (krvni tlak) -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sistolični in diastolični tlak pacienta</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                
+                <div class="col-lg-6 col-md-6 col-sm-6" id="sisTlakP">
+                 
+                </div>
+                
+                 <div class="col-lg-6 col-md-6 col-sm-6" id="diaTlakP">
+                  
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- KONEC: VITALNI ZNAKI (krvni tlak) -->
+      
+       <!-- ZAČETEK: VITALNI ZNAKI (temperatura in kisik v krvi) -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Temperatura in kisik v krvi pacienta</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                
+                <div class="col-lg-6 col-md-6 col-sm-6" id="temperaturaP">
+                 
+                </div>
+                
+                 <div class="col-lg-6 col-md-6 col-sm-6" id="kisikVKrviP">
+                  
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- KONEC: VITALNI ZNAKI (temperatura in kisik v krvi) -->
     </div>
     
   </div>

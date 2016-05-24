@@ -117,19 +117,25 @@ function generirajPodatke(stPacienta) {
         ehrId = zacetniEHRzaPacienta("Janez", "Janša", "1975-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Janez Janša</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Janez", priimekPac: "Janša"};
-        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2000-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2002-06-13T01:25", "175", "62.00", "36.50", "115", "59", "95", "Micka");
+        zacetneMeritve(ehrId, "2004-06-13T01:25", "175", "63.00", "36.60", "130", "68", "95", "Micka");
     } else if(stPacienta === 2) {
         ehrId = zacetniEHRzaPacienta("Ana", "Karenina", "1965-06-12T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Ana Karenina</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Ana", priimekPac: "Karenina"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
-        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2003-06-13T01:25", "169", "50.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2004-06-13T01:25", "169", "52.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2006-06-13T01:25", "169", "51.60", "36.30", "120", "60", "95", "Micka");
     }else if(stPacienta === 3) {
         ehrId = zacetniEHRzaPacienta("Amresh", "Linker", "2003-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Amresh Linker</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Amresh", priimekPac: "Linker"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
-        zacetneMeritve(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2002-06-13T01:25", "172", "55.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2010-06-13T01:25", "172", "59.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2016-04-13T01:25", "172", "51.00", "36.30", "120", "60", "95", "Micka");
     }
     return podatkiPac;
 }
@@ -326,16 +332,24 @@ function naloziPodatke() {
   $("#vnosPodatkov1").hide();
   $("#vnosPodatkov2").hide();
   $("#vnosPodatkov3").hide();
-  $("#prikazPodatkov").show();
+  $("#prikazPodatkov1").show();
+  $("#prikazPodatkov2").show();
   $("#vrniGumb").show();
 }
 
 function nacin() {
   console.log("vračam se na podatke");
+  $("#visinaP").html('');
+  $("#telesnaTezaP").html('');
+  $("#sisTlakP").html('');
+  $("#diaTlakP").html('');
+  $("#kisikVKrviP").html('');
+  $("#temperaturaP").html('');
   $("#vnosPodatkov1").show();
   $("#vnosPodatkov2").show();
   $("#vnosPodatkov3").show();
-  $("#prikazPodatkov").hide();
+  $("#prikazPodatkov1").hide();
+  $("#prikazPodatkov2").hide();
   $("#vrniGumb").hide();
 }
 
@@ -440,7 +454,7 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 				        results += "</table>";
 				        $("#visinaP").append(results);
 			    	} else {
-			    		alert("ni podatkov!");
+			    		alert("Ni podatkov o teži pacienta!");
 			    	}
 			    },
 			    error: function() {
@@ -466,7 +480,7 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 				        results += "</table>";
 				        $("#telesnaTezaP").append(results);
 			    	} else {
-			    		alert("ni podatkov!");
+			    		alert("Ni podatkov o višini pacienta!");
 			    	}
 			    },
 			    error: function() {
@@ -474,6 +488,149 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			    }
 			  });
 					
+					
+				//klic funkcije za pridobitev tlaka
+				pridobiTlakPacienta(ehrId);
+			},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});
+	}
+}
+
+function pridobiTlakPacienta(ehrId) {
+  sessionId = getSessionId();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				
+				//Tlak pacienta
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "blood_pressure",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Sistolični tlak</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].systolic +
+                      " " + res[i].unit + "</td>";
+				        }
+				        results += "</table>";
+				        $("#sisTlakP").append(results);
+				        
+				        var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Diastolični tlak</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].diastolic +
+                      " " + res[i].unit + "</td>";
+				        }
+				        results += "</table>";
+				        $("#diaTlakP").append(results);
+			    	} else {
+			    		alert("Ni podatkov o tlaku pacienta!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+				
+				//klic za pridobitev temperature in kisika v krvi pacienta
+				pridobiTempKisikPacienta(ehrId);
+					
+			},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});
+	}
+}
+
+function pridobiTempKisikPacienta(ehrId) {
+  sessionId = getSessionId();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				
+				//Telesna temperatura
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "body_temperature",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Telesna temperatura</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].temperature +
+                      " " + res[i].unit + "</td>";
+				        }
+				        results += "</table>";
+				        $("#temperaturaP").append(results);
+			    	} else {
+			    		alert("Ni podatkov o telesni temperaturi pacienta!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+				
+				//kisik v krvi
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "spO2",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Kisik v krvi</th></tr>";
+				        for (var i in res) {
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + res[i].spO2 +
+                      " " + "%" + "</td>";
+				        }
+				        results += "</table>";
+				        $("#kisikVKrviP").append(results);
+			    	} else {
+			    		alert("Ni podatkov o nasičenisti krvi s kisikom pacienta!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+			  
 			},
 			error: function(err) {
 				$("#preberiSporocilo").html("<span class='obvestilo label " +
