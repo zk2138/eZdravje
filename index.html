@@ -148,7 +148,6 @@
       						</div>
       						<span class="label label-default">Merilec</span>
                   <input id="vpisiMerilec" type="text" class="form-control input-mini" placeholder="Sam">
-                  <button type="button" class="vpisiMeritevPacient" onclick="dodajMeritve()" /*onclick="EHRzaPacienta()"*/>Vpiši podatke meritve za pacienta</button><span id="sporociloM"></span>
                 </div>
                 
               </div>
@@ -171,17 +170,22 @@
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <form role="form">
-                    <label class="radio-inline"><input type="radio" name="optradio" checked="checked" onclick="getLocation(0);">Spočit</label>
-                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(2);">Utrujen</label>
-                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(3);">Bolečina</label>
-                    <label class="radio-inline"><input type="radio" name="optradio" onclick="getLocation(1);">Poškodba</label>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                  <form action="">
+                    <input type="radio" name="optradio" id="spocit" checked="checked" onclick="getLocation(0); preveri()"><strong>  Spočit</strong><br><br>
+                    <input type="radio" name="optradio" id="utrujen" onclick="getLocation(2); preveri()"><strong>  Utrujen</strong><br><br>
+                    <input type="radio" name="optradio" id="bolecina" onclick="getLocation(3); preveri()"><strong>  Bolečina</strong><br><br>
+                    <input type="radio" name="optradio" id="poskodba" onclick="getLocation(1); preveri()"><strong>  Poškodba</strong>
                   </form>
                 </div>
                 
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-9 col-md-9 col-sm-9">
                   <!-- tu bo polje za opis problema -->
+                  <span class="label label-default">Naziv težave/bolezni</span>
+                  <input id="vpisiImeTezave" type="text" class="form-control input-mini" placeholder="Prehlad">
+                  <span class="label label-default">Opis težave/bolezni</span>
+                  <input id="vpisiOpisTezave" type="text" class="form-control input-mini" placeholder="Smrkanje, kašljanje, vročina, bolečina v grlu.">
+                  <button type="button" class="vpisiMeritevPacient" onclick="dodajMeritve()">Vpiši podatke meritve za pacienta</button><span id="sporociloM"></span>
                 </div>
                 
               </div>

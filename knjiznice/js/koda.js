@@ -367,8 +367,10 @@ function dodajMeritve() {
 	var diastolicniKrvniTlak = $("#vpisiDiaTlak").val();
 	var nasicenostKrviSKisikom = $("#vpisiKri").val();
 	var merilec = $("#vpisiMerilec").val();
+	var problem = $("#vpisiImeTezave").val();
+	var opis = $("#vpisiOpisTezave").val();
 
-	if (!ehrId || ehrId.trim().length == 0) {
+	if (!ehrId || ehrId.trim().length == 0 || !problem || !opis) {
 		$("#sporociloM").html("<span class='obvestilo " +
       "label label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
@@ -376,8 +378,6 @@ function dodajMeritve() {
 		    headers: {"Ehr-Session": sessionId}
 		});
 		var podatki = {
-			// Struktura predloge je na voljo na naslednjem spletnem naslovu:
-      // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
 		    "ctx/language": "en",
 		    "ctx/territory": "SI",
 		    "ctx/time": datumInUra,
@@ -403,14 +403,15 @@ function dodajMeritve() {
 		    success: function (res) {
 		    	console.log("Uspešno dodani podatki");
 		    	$("#vpisiEhrId").val('');
-        	$("#vpisiDatumMeritev").val('');
-        	$("#vpisiTelesnaVisna").val('');
-        	$("#vpisiTeza").val('');
-        	$("#vpisiTemperatura").val('');
-        	$("#vpisiSisTlak").val('');
-        	$("#vpisiDiaTlak").val('');
-        	$("#vpisiKri").val('');
-        	$("#vpisiMerilec").val('');
+	        	$("#vpisiDatumMeritev").val('');
+	        	$("#vpisiTelesnaVisna").val('');
+	        	$("#vpisiTeza").val('');
+	        	$("#vpisiTemperatura").val('');
+	        	$("#vpisiSisTlak").val('');
+	        	$("#vpisiDiaTlak").val('');
+	        	$("#vpisiKri").val('');
+	        	$("#vpisiMerilec").val('');
+	        	dodajTezavoPacienta(ehrId, datumInUra, merilec);
 		    },
 		    error: function(err) {
 		    	$("#sporociloM").html(
@@ -419,6 +420,66 @@ function dodajMeritve() {
 		    }
 		});
 	}
+}
+
+function dodajTezavoPacienta(ehrId, datumInUra, merilec) {
+	sessionId = getSessionId();
+	var odkljukan = 0;
+	if($("#spocit").checked) {
+		console.log("spocit");
+		odkljukan = 0;
+	} else if($("#utrujen").checked) {
+		console.log("utrujen");
+		odkljukan = 1;
+	} else if($("#bolecina").checked) {
+		console.log("bolecina");
+		odkljukan = 2;
+	} else if($("#poskodba").checked) {
+		console.log("poskodba");
+		odkljukan = 3;
+	}
+	
+	var problem = $("#vpisiImeTezave").val();
+	var opis = $("#vpisiOpisTezave").val();
+	
+	if (!problem || !opis || !ehrId || ehrId.trim().length == 0) {
+		$("#sporociloM").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		
+		var podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": datumInUra,
+		    "medical_diagnosis/problem_diagnosis:0/problem_diagnosis|code": odkljukan,
+			"medical_diagnosis/problem_diagnosis:0/problem_diagnosis|value": problem,
+			"medical_diagnosis/problem_diagnosis:0/clinical_description": opis
+		};
+		
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Medical Diagnosis',
+		    format: 'FLAT',
+		    committer: merilec
+		};
+			
+		$.ajax({
+			url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+		       console.log('Dodan problem');
+		    },
+		    error: function(err) {
+		        console.log('Napaka pri dodajanju problema in opisa');
+		    }
+		});
+	}
+	
 }
 
 
@@ -638,5 +699,34 @@ function pridobiTempKisikPacienta(ehrId) {
           JSON.parse(err.responseText).userMessage + "'!");
 			}
 		});
+	}
+}
+
+function preveri() {
+	var odkljukan = 0;
+	if($("#spocit").attr("checked") == "checked") {
+		console.log("spocit");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		odkljukan = 0;
+	} else if($("#utrujen").attr("checked") == "checked") {
+		console.log("utrujen");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		odkljukan = 1;
+	} else if($("#bolecina").checked) {
+		console.log("bolecina");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		odkljukan = 2;
+	} else if($("#poskodba").checked) {
+		console.log("poskodba");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		$("#spocit").attr("checked");
+		odkljukan = 3;
 	}
 }

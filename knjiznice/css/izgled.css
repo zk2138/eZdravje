@@ -40,6 +40,11 @@
     width: 200px;
 }
 
+#vpisiImeTezave {
+    width: 40%;
+}
+
+
 /* Dropdown Content (Hidden by Default) */
 .dropdown-contentI, .dropdown-contentP {
     display: none;
