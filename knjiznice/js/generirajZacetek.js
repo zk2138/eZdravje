@@ -44,7 +44,7 @@ function zacetniEHRzaPacienta(ime, priimek, datumRojstva) {
 	}
 }
 
-function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom,merilec) {
+function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, merilec, pocutje) {
 	//console.log("klic funkcije");
 	sessionId = getSessionId();
 	/*
@@ -86,7 +86,9 @@ function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTe
 		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
 		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
 		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
-		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom,
+		    "vital_signs/pulse:0/any_event:0/rate|magnitude": pocutje,
+  			"vital_signs/pulse:0/any_event:0/rate|unit": "/min"
 		};
 		var parametriZahteve = {
 		    ehrId: ehrId,

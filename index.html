@@ -16,7 +16,7 @@
   <script src="knjiznice/js/zemljevid.js"></script>
   <script src="knjiznice/js/generirajZacetek.js"></script>
 </head>
-<body onload="generirajZacetne3UporabnikeOnLoad(); naloziPaciente(); nacin();">
+<body onload="generirajZacetne3UporabnikeOnLoad(); naloziPaciente(); nacin(); preveri('1')">
 
   <!-- ZAČETEK: Menujska vrstica na vrhu spletne strani -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -35,6 +35,7 @@
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
           <li onclick = "generirajZacetne3Uporabnike()"><a href="#">Generiranje podatkov</a></li>
+          <li onclick = "dodajTezavoPacienta('42214e90-54e2-4ebb-ad64-ef7d16eb64bb', '1995-04-15T00:08','Nekdo')"><a href="#">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -77,7 +78,7 @@
               <input id="vpisiPriimek" type="text" class="form-control input-mini" placeholder="Janša">
               <span class="label label-default">Datum Rojstva</span>
               <input id="vpisiDatumR" type="text" class="form-control input-mini" placeholder="1995-04-15T00:08">
-              <button type="button" class="dodaj" onclick="EHRzaPacienta()">Dodaj osnovne podatke o pacientu</button><span id="sporociloP"></span>
+              <button type="button" class="dodaj" onclick="EHRzaPacienta();">Dodaj osnovne podatke o pacientu</button><span id="sporociloP"></span>
             </div>
           </div>
         </div>
@@ -148,6 +149,14 @@
       						</div>
       						<span class="label label-default">Merilec</span>
                   <input id="vpisiMerilec" type="text" class="form-control input-mini" placeholder="Sam">
+                  <form action="">
+                    <span class="label label-default">Počutje</span><br>
+                    <input type="radio" name="optradio" id="kNov" onclick="getLocation(0); preveri('1')"><strong>     Spočit</strong>
+                    <input type="radio" name="optradio" id="utrujen" onclick="getLocation(2); preveri('2')"><strong>     Utrujen</strong>
+                    <input type="radio" name="optradio" id="bolecina" onclick="getLocation(3); preveri('3')"><strong>     Bolečina</strong>
+                    <input type="radio" name="optradio" id="poskodba" onclick="getLocation(1); preveri('4')"><strong>     Poškodba</strong>
+                  </form>
+                  <button type="button" class="vpisiMeritevPacient" onclick="dodajMeritve();">Vpiši podatke meritve za pacienta</button><span id="sporociloM"></span>
                 </div>
                 
               </div>
@@ -157,44 +166,6 @@
         </div>
       </div>
       <!-- KONEC: Meritve pacienta -->
-    </div>
-    
-    <div class="row" id="vnosPodatkov3">
-      <!-- ZAČETEK: Počutje in opis problema -->
-      <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="col-md-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Počutje in opis težav pacienta</h3>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                  <form action="">
-                    <input type="radio" name="optradio" id="spocit" checked="checked" onclick="getLocation(0); preveri()"><strong>  Spočit</strong><br><br>
-                    <input type="radio" name="optradio" id="utrujen" onclick="getLocation(2); preveri()"><strong>  Utrujen</strong><br><br>
-                    <input type="radio" name="optradio" id="bolecina" onclick="getLocation(3); preveri()"><strong>  Bolečina</strong><br><br>
-                    <input type="radio" name="optradio" id="poskodba" onclick="getLocation(1); preveri()"><strong>  Poškodba</strong>
-                  </form>
-                </div>
-                
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                  <!-- tu bo polje za opis problema -->
-                  <span class="label label-default">Naziv težave/bolezni</span>
-                  <input id="vpisiImeTezave" type="text" class="form-control input-mini" placeholder="Prehlad">
-                  <span class="label label-default">Opis težave/bolezni</span>
-                  <input id="vpisiOpisTezave" type="text" class="form-control input-mini" placeholder="Smrkanje, kašljanje, vročina, bolečina v grlu.">
-                  <button type="button" class="vpisiMeritevPacient" onclick="dodajMeritve()">Vpiši podatke meritve za pacienta</button><span id="sporociloM"></span>
-                </div>
-                
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- KONEC: Počutje in opis problema -->
     </div>
     
     <div class="row" id="prikazPodatkov1">
@@ -297,6 +268,29 @@
         </div>
       </div>
       <!-- KONEC: VITALNI ZNAKI (temperatura in kisik v krvi) -->
+    </div>
+    
+    <div class="row" id="prikazPodatkov3">
+      <!-- ZAČETEK: Prikaz problemov -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Počutje pacienta</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                
+                <div class="col-lg-12 col-md-12 col-sm-12" id="pocutjeP">
+                 
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- KONEC: Prikaz problemov -->
     </div>
     
   </div>

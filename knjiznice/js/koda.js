@@ -117,25 +117,25 @@ function generirajPodatke(stPacienta) {
         ehrId = zacetniEHRzaPacienta("Janez", "Janša", "1975-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Janez Janša</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Janez", priimekPac: "Janša"};
-        zacetneMeritve(ehrId, "2000-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka");
-        zacetneMeritve(ehrId, "2002-06-13T01:25", "175", "62.00", "36.50", "115", "59", "95", "Micka");
-        zacetneMeritve(ehrId, "2004-06-13T01:25", "175", "63.00", "36.60", "130", "68", "95", "Micka");
+        zacetneMeritve(ehrId, "2000-06-13T01:25", "175", "60.00", "36.30", "120", "60", "95", "Micka", "0");
+        zacetneMeritve(ehrId, "2002-06-13T01:25", "175", "62.00", "36.50", "115", "59", "95", "Micka", "1");
+        zacetneMeritve(ehrId, "2004-06-13T01:25", "175", "63.00", "36.60", "130", "68", "95", "Micka", "0");
     } else if(stPacienta === 2) {
         ehrId = zacetniEHRzaPacienta("Ana", "Karenina", "1965-06-12T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Ana Karenina</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Ana", priimekPac: "Karenina"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
-        zacetneMeritve(ehrId, "2003-06-13T01:25", "169", "50.00", "36.30", "120", "60", "95", "Micka");
-        zacetneMeritve(ehrId, "2004-06-13T01:25", "169", "52.00", "36.30", "120", "60", "95", "Micka");
-        zacetneMeritve(ehrId, "2006-06-13T01:25", "169", "51.60", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2003-06-13T01:25", "169", "50.00", "36.30", "120", "60", "95", "Micka", "1");
+        zacetneMeritve(ehrId, "2004-06-13T01:25", "169", "52.00", "36.30", "120", "60", "95", "Micka", "1");
+        zacetneMeritve(ehrId, "2006-06-13T01:25", "169", "51.60", "36.30", "120", "60", "95", "Micka", "2");
     }else if(stPacienta === 3) {
         ehrId = zacetniEHRzaPacienta("Amresh", "Linker", "2003-06-13T01:25");
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Amresh Linker</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Amresh", priimekPac: "Linker"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
-        zacetneMeritve(ehrId, "2002-06-13T01:25", "172", "55.00", "36.30", "120", "60", "95", "Micka");
-        zacetneMeritve(ehrId, "2010-06-13T01:25", "172", "59.00", "36.30", "120", "60", "95", "Micka");
-        zacetneMeritve(ehrId, "2016-04-13T01:25", "172", "51.00", "36.30", "120", "60", "95", "Micka");
+        zacetneMeritve(ehrId, "2002-06-13T01:25", "172", "55.00", "36.30", "120", "60", "95", "Micka", "3");
+        zacetneMeritve(ehrId, "2010-06-13T01:25", "172", "59.00", "36.30", "120", "60", "95", "Micka", "3");
+        zacetneMeritve(ehrId, "2016-04-13T01:25", "172", "51.00", "36.30", "120", "60", "95", "Micka", "3");
     }
     return podatkiPac;
 }
@@ -331,9 +331,9 @@ function naloziPodatke() {
   console.log("nalagam podatke");
   $("#vnosPodatkov1").hide();
   $("#vnosPodatkov2").hide();
-  $("#vnosPodatkov3").hide();
   $("#prikazPodatkov1").show();
   $("#prikazPodatkov2").show();
+  $("#prikazPodatkov3").show();
   $("#vrniGumb").show();
 }
 
@@ -347,9 +347,9 @@ function nacin() {
   $("#temperaturaP").html('');
   $("#vnosPodatkov1").show();
   $("#vnosPodatkov2").show();
-  $("#vnosPodatkov3").show();
   $("#prikazPodatkov1").hide();
   $("#prikazPodatkov2").hide();
+  $("#prikazPodatkov3").hide();
   $("#vrniGumb").hide();
 }
 
@@ -367,8 +367,21 @@ function dodajMeritve() {
 	var diastolicniKrvniTlak = $("#vpisiDiaTlak").val();
 	var nasicenostKrviSKisikom = $("#vpisiKri").val();
 	var merilec = $("#vpisiMerilec").val();
-	var problem = $("#vpisiImeTezave").val();
-	var opis = $("#vpisiOpisTezave").val();
+	var pocutje = 0;
+	
+	if($("#spocit").attr("checked") == "checked") {
+		console.log("spocit");
+		pocutje = 0;
+	} else if($("#utrujen").attr("checked") == "checked") {
+		console.log("utrujen");
+		pocutje = 1;
+	} else if($("#bolecina").attr("checked") == "checked") {
+		console.log("bolecina");
+		pocutje = 2;
+	} else if($("#poskodba").attr("checked") == "checked") {
+		console.log("poskodba");
+		pocutje = 3;
+	}
 
 	if (!ehrId || ehrId.trim().length == 0 || !problem || !opis) {
 		$("#sporociloM").html("<span class='obvestilo " +
@@ -387,7 +400,9 @@ function dodajMeritve() {
 		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
 		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
 		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
-		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom,
+		    "vital_signs/pulse:0/any_event:0/rate|magnitude": pocutje,
+  			"vital_signs/pulse:0/any_event:0/rate|unit": "/min"
 		};
 		var parametriZahteve = {
 		    ehrId: ehrId,
@@ -411,7 +426,7 @@ function dodajMeritve() {
 	        	$("#vpisiDiaTlak").val('');
 	        	$("#vpisiKri").val('');
 	        	$("#vpisiMerilec").val('');
-	        	dodajTezavoPacienta(ehrId, datumInUra, merilec);
+	        	preveri('1');
 		    },
 		    error: function(err) {
 		    	$("#sporociloM").html(
@@ -421,67 +436,6 @@ function dodajMeritve() {
 		});
 	}
 }
-
-function dodajTezavoPacienta(ehrId, datumInUra, merilec) {
-	sessionId = getSessionId();
-	var odkljukan = 0;
-	if($("#spocit").checked) {
-		console.log("spocit");
-		odkljukan = 0;
-	} else if($("#utrujen").checked) {
-		console.log("utrujen");
-		odkljukan = 1;
-	} else if($("#bolecina").checked) {
-		console.log("bolecina");
-		odkljukan = 2;
-	} else if($("#poskodba").checked) {
-		console.log("poskodba");
-		odkljukan = 3;
-	}
-	
-	var problem = $("#vpisiImeTezave").val();
-	var opis = $("#vpisiOpisTezave").val();
-	
-	if (!problem || !opis || !ehrId || ehrId.trim().length == 0) {
-		$("#sporociloM").html("<span class='obvestilo label label-warning " +
-      "fade-in'>Prosim vnesite zahtevan podatek!");
-	} else {
-		$.ajaxSetup({
-		    headers: {"Ehr-Session": sessionId}
-		});
-		
-		var podatki = {
-		    "ctx/language": "en",
-		    "ctx/territory": "SI",
-		    "ctx/time": datumInUra,
-		    "medical_diagnosis/problem_diagnosis:0/problem_diagnosis|code": odkljukan,
-			"medical_diagnosis/problem_diagnosis:0/problem_diagnosis|value": problem,
-			"medical_diagnosis/problem_diagnosis:0/clinical_description": opis
-		};
-		
-		var parametriZahteve = {
-		    ehrId: ehrId,
-		    templateId: 'Medical Diagnosis',
-		    format: 'FLAT',
-		    committer: merilec
-		};
-			
-		$.ajax({
-			url: baseUrl + "/composition?" + $.param(parametriZahteve),
-		    type: 'POST',
-		    contentType: 'application/json',
-		    data: JSON.stringify(podatki),
-		    success: function (res) {
-		       console.log('Dodan problem');
-		    },
-		    error: function(err) {
-		        console.log('Napaka pri dodajanju problema in opisa');
-		    }
-		});
-	}
-	
-}
-
 
 function pridobiTezoinVisinoPacienta(ehrId) {
   sessionId = getSessionId();
@@ -692,6 +646,8 @@ function pridobiTempKisikPacienta(ehrId) {
 			    }
 			  });
 			  
+			  pridobiPocutjePacienta(ehrId);
+			  
 			},
 			error: function(err) {
 				$("#preberiSporocilo").html("<span class='obvestilo label " +
@@ -702,31 +658,95 @@ function pridobiTempKisikPacienta(ehrId) {
 	}
 }
 
-function preveri() {
-	var odkljukan = 0;
-	if($("#spocit").attr("checked") == "checked") {
-		console.log("spocit");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		odkljukan = 0;
-	} else if($("#utrujen").attr("checked") == "checked") {
-		console.log("utrujen");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		odkljukan = 1;
-	} else if($("#bolecina").checked) {
-		console.log("bolecina");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		odkljukan = 2;
-	} else if($("#poskodba").checked) {
-		console.log("poskodba");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		$("#spocit").attr("checked");
-		odkljukan = 3;
+function pridobiPocutjePacienta(ehrId) {
+  sessionId = getSessionId();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				
+				//Počutje pacienta iz pulza
+				$.ajax({
+			    url: baseUrl + "/view/" + ehrId + "/" + "pulse",
+			    type: 'GET',
+			    headers: {"Ehr-Session": sessionId},
+			    success: function (res) {
+			    	if (res.length > 0) {
+				    	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Datum in ura</th>" +
+                "<th class='text-right'>Počutje pacienta</th></tr>";
+				        for (var i in res) {
+				        	var feel = "";
+				        	if(res[i].pulse == 0)
+				        		feel = "Spočit";
+				        	else if(res[i].pulse == 1)
+				        		feel = "Utrujen";
+				        	else if(res[i].pulse == 2)
+				        		feel = "Bolečina";
+				        	else if(res[i].pulse == 3)
+				        		feel = "Poškodba";
+				        		
+				            results += "<tr><td>" + res[i].time +
+                      "</td><td class='text-right'>" + feel +
+                      "</td>";
+				        }
+				        results += "</table>";
+				        $("#pocutjeP").append(results);
+			    	} else {
+			    		alert("Ni podatkov o telesni temperaturi pacienta!");
+			    	}
+			    },
+			    error: function() {
+			    	alert(JSON.parse(err.responseText).userMessage);
+			    }
+			  });
+			  
+			},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});
+	}
+}
+
+function preveri(knof) {
+	
+	if(knof == '1') {
+		//console.log("spocit");
+		$("#utrujen").removeAttr("checked");
+		$("#bolecina").removeAttr("checked");
+		$("#poskodba").removeAttr("checked");
+		$("#kNov").attr("checked", "checked");
+		document.getElementById("kNov").checked = true;
+	} else if(knof == '2') {
+		//console.log("utrujen");
+		$("#kNov").removeAttr("checked");
+		$("#bolecina").removeAttr("checked");
+		$("#poskodba").removeAttr("checked");
+		$("#utrujen").attr("checked", "checked");
+		document.getElementById("utrujen").checked = true;
+	} else if(knof == '3') {
+		//console.log("bolecina");
+		$("#kNov").removeAttr("checked");
+		$("#utrujen").removeAttr("checked");
+		$("#poskodba").removeAttr("checked");
+		$("#bolecina").attr("checked", "checked");
+		document.getElementById("bolecina").checked = true;
+	} else if(knof == '4') {
+		//console.log("poskodba");
+		$("#kNov").removeAttr("checked");
+		$("#utrujen").removeAttr("checked");
+		$("#bolecina").removeAttr("checked");
+		$("#poskodba").attr("checked", "checked");
+		document.getElementById("poskodba").checked = true;
 	}
 }
