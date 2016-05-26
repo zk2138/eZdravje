@@ -27,6 +27,10 @@ function getSessionId() {
 
 var ehrIdTemp = [];
 var ehrIdTab = [];
+var bmiTab = [];
+
+var bmiRazred = ["< 18.5 BMI (Underweight)", "18.5 - 24.99 BMI (Normal Weight)", "25 - 29.99 BMI (Overweight)", "30 - 34.99 BMI (Obesity (Class 1))", "35 - 39.99 BMI (Obesity (Class 2))", ">= 40 BMI (Morbid Obesity)"];
+var bmiOsebka = [0, 0, 0, 0, 0, 0];
 
 function generirajZacetne3UporabnikeOnLoad() {
   if(ehrIdTab.length != 0)
@@ -125,7 +129,7 @@ function generirajPodatke(stPacienta) {
         $('#pacient').append('<a href="#" onclick="vnesiEHRID(\'' + ehrId + '\')">Ana Karenina</a>');
         podatkiPac = {ehrIdPac: ehrId, imePac: "Ana", priimekPac: "Karenina"};
         //zacetniEHRzaPacienta(ehrId, "1975-06-13T01:25", "175", "60.00", "36.30", "120", "60", "98", "Micka" );
-        zacetneMeritve(ehrId, "2003-06-13T01:25", "169", "50.00", "36.30", "120", "60", "95", "Micka", "1");
+        zacetneMeritve(ehrId, "2003-06-13T01:25", "167", "120.00", "36.30", "120", "60", "95", "Micka", "1");
         zacetneMeritve(ehrId, "2004-06-13T01:25", "169", "52.00", "36.30", "120", "60", "95", "Micka", "1");
         zacetneMeritve(ehrId, "2006-06-13T01:25", "169", "51.60", "36.30", "120", "60", "95", "Micka", "2");
     }else if(stPacienta === 3) {
@@ -211,6 +215,7 @@ function vnesiEHRID(ehrId) {
 
 function pridobiEhrPacienta() {
 	sessionId = getSessionId();
+	bmiTab = [];
 
 	var ehrId = $("#ehrIdP").val();
 
@@ -238,7 +243,7 @@ function pridobiEhrPacienta() {
       	$("#vrniPriimek").val(party.lastNames);
       	$("#vrniDatumR").val(party.dateOfBirth);
       	$("#vrniEhrIdP").val(ehrId);
-      	pridobiTezoinVisinoPacienta(ehrId);
+      	pridobiVisinoPacienta(ehrId);
           
         setTimeout(function() {
           $('#vrnisporociloP').html('');
@@ -437,7 +442,7 @@ function dodajMeritve() {
 	}
 }
 
-function pridobiTezoinVisinoPacienta(ehrId) {
+function pridobiVisinoPacienta(ehrId) {
   sessionId = getSessionId();
 
 	if (!ehrId || ehrId.trim().length == 0) {
@@ -457,6 +462,7 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			    type: 'GET',
 			    headers: {"Ehr-Session": sessionId},
 			    success: function (res) {
+			    	var visina = 0;
 			    	if (res.length > 0) {
 				    	var results = "<table class='table table-striped " +
                 "table-hover'><tr><th>Datum in ura</th>" +
@@ -468,6 +474,7 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 				        }
 				        results += "</table>";
 				        $("#visinaP").append(results);
+				        pridobiTezoPacienta(ehrId, res);
 			    	} else {
 			    		alert("Ni podatkov o teži pacienta!");
 			    	}
@@ -476,6 +483,28 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			    	alert(JSON.parse(err.responseText).userMessage);
 			    }
 			  });
+	    	},
+			error: function(err) {
+				$("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});	
+	}
+}
+
+
+function pridobiTezoPacienta(ehrId, resV) {
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#sporociloB").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Prosim vnesite zahtevan podatek!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
 				
 				//telesna teža
 				$.ajax({
@@ -483,6 +512,7 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			    type: 'GET',
 			    headers: {"Ehr-Session": sessionId},
 			    success: function (res) {
+			    	var bmi = 0;
 			    	if (res.length > 0) {
 				    	var results = "<table class='table table-striped " +
                 "table-hover'><tr><th>Datum in ura</th>" +
@@ -491,6 +521,8 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 				            results += "<tr><td>" + res[i].time +
                       "</td><td class='text-right'>" + res[i].weight +
                       " " + res[i].unit + "</td>";
+                      	bmi = vrniBmi(resV[i].height, res[i].weight);
+                      	bmiTab.push(bmi);
 				        }
 				        results += "</table>";
 				        $("#telesnaTezaP").append(results);
@@ -503,7 +535,6 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			    }
 			  });
 					
-					
 				//klic funkcije za pridobitev tlaka
 				pridobiTlakPacienta(ehrId);
 			},
@@ -514,6 +545,12 @@ function pridobiTezoinVisinoPacienta(ehrId) {
 			}
 		});
 	}
+}
+
+function vrniBmi(visina, teza) {
+	var bmiT = 0;
+	bmiT = teza*10000/(visina*visina);
+	return bmiT.toFixed(2);
 }
 
 function pridobiTlakPacienta(ehrId) {
@@ -579,6 +616,7 @@ function pridobiTlakPacienta(ehrId) {
 		});
 	}
 }
+
 
 function pridobiTempKisikPacienta(ehrId) {
   sessionId = getSessionId();
@@ -708,6 +746,8 @@ function pridobiPocutjePacienta(ehrId) {
 			    }
 			  });
 			  
+			  prilepiBmi() ;
+			  
 			},
 			error: function(err) {
 				$("#preberiSporocilo").html("<span class='obvestilo label " +
@@ -716,6 +756,35 @@ function pridobiPocutjePacienta(ehrId) {
 			}
 		});
 	}
+}
+
+function prilepiBmi() {
+	var results = "<table class='table table-striped " +
+    "table-hover'><tr><th>Razred BMI</th>" +
+    "<th class='text-right'>Povprečni BMI pacienta</th></tr>";
+	        for (var i in bmiTab) {
+	        	if(bmiTab[i] < 18.5)
+	        		bmiOsebka[0]++;
+	        	else if(bmiTab[i] >= 18.5 && bmiTab[i] < 24.99)
+	        		bmiOsebka[1]++;
+	            else if(bmiTab[i] > 25 && bmiTab[i] <= 29.99)
+	        		bmiOsebka[2]++;
+	        	else if(bmiTab[i] >= 30 && bmiTab[i] <= 34.99)
+	        		bmiOsebka[3]++;
+	        	else if(bmiTab[i] >= 35 && bmiTab[i] <= 39.99)
+	        		bmiOsebka[4]++;	
+	        	else if(bmiTab[i] >= 40)
+	        		bmiOsebka[5]++;
+	        }
+	        
+	        for(i = 0; i < 6; i++) {
+	        	povpBmi = (bmiOsebka[i]/bmiTab.length)*100;
+	        	results += "<tr><td>" + bmiRazred[i] +
+          "</td><td class='text-right'>" + povpBmi.toFixed(2) + " %" +
+          "</td>";
+	        }
+	        results += "</table>";
+	        $("#bmiP").append(results);
 }
 
 function preveri(knof) {
