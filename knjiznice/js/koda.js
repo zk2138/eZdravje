@@ -356,6 +356,13 @@ function nacin() {
   $("#temperaturaP").html('');
   $("#pocutjeP").html('');
   $("#bmiP").html('');
+  $("#pocutjeL").html('');
+  $("#bmiL").html('');
+  bmiTab = [];
+  bmiProc = [];
+  pocutjeProc=[];
+  bmiOsebka = [0, 0, 0, 0, 0, 0];
+  pocutjeTab=[0, 0, 0, 0];
   $("#vnosPodatkov1").show();
   $("#vnosPodatkov2").show();
   $("#prikazPodatkov1").hide();
