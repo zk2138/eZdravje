@@ -28,9 +28,13 @@ function getSessionId() {
 var ehrIdTemp = [];
 var ehrIdTab = [];
 var bmiTab = [];
+var bmiProc = [];
+var pocutjeProc=[];
 
 var bmiRazred = ["< 18.5 BMI (Underweight)", "18.5 - 24.99 BMI (Normal Weight)", "25 - 29.99 BMI (Overweight)", "30 - 34.99 BMI (Obesity (Class 1))", "35 - 39.99 BMI (Obesity (Class 2))", ">= 40 BMI (Morbid Obesity)"];
+var pocutjeRazred=["Spočit", "Utrujen", "Bolečina", "Poškodba"];
 var bmiOsebka = [0, 0, 0, 0, 0, 0];
+var pocutjeTab=[0, 0, 0, 0];
 
 function generirajZacetne3UporabnikeOnLoad() {
   if(ehrIdTab.length != 0)
@@ -350,6 +354,8 @@ function nacin() {
   $("#diaTlakP").html('');
   $("#kisikVKrviP").html('');
   $("#temperaturaP").html('');
+  $("#pocutjeP").html('');
+  $("#bmiP").html('');
   $("#vnosPodatkov1").show();
   $("#vnosPodatkov2").show();
   $("#prikazPodatkov1").hide();
@@ -388,7 +394,7 @@ function dodajMeritve() {
 		pocutje = 3;
 	}
 
-	if (!ehrId || ehrId.trim().length == 0 || !problem || !opis) {
+	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloM").html("<span class='obvestilo " +
       "label label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
@@ -432,6 +438,14 @@ function dodajMeritve() {
 	        	$("#vpisiKri").val('');
 	        	$("#vpisiMerilec").val('');
 	        	preveri('1');
+		        		
+		        $("#sporociloM").html("<span class='obvestilo " +
+                          "label label-success fade-in'>Uspešno dodani podatki osebe z EHR '" +
+                          ehrId + "'.</span>");
+                          
+                          setTimeout(function() {
+                            $('#sporociloM').html("");
+                          }, 6000);
 		    },
 		    error: function(err) {
 		    	$("#sporociloM").html(
@@ -717,28 +731,25 @@ function pridobiPocutjePacienta(ehrId) {
 			    headers: {"Ehr-Session": sessionId},
 			    success: function (res) {
 			    	if (res.length > 0) {
-				    	var results = "<table class='table table-striped " +
-                "table-hover'><tr><th>Datum in ura</th>" +
-                "<th class='text-right'>Počutje pacienta</th></tr>";
 				        for (var i in res) {
-				        	var feel = "";
 				        	if(res[i].pulse == 0)
-				        		feel = "Spočit";
+				        		pocutjeTab[0]++;
 				        	else if(res[i].pulse == 1)
-				        		feel = "Utrujen";
+				        		pocutjeTab[1]++;
 				        	else if(res[i].pulse == 2)
-				        		feel = "Bolečina";
+				        		pocutjeTab[2]++;
 				        	else if(res[i].pulse == 3)
-				        		feel = "Poškodba";
-				        		
-				            results += "<tr><td>" + res[i].time +
-                      "</td><td class='text-right'>" + feel +
-                      "</td>";
+				        		pocutjeTab[3]++;
 				        }
-				        results += "</table>";
-				        $("#pocutjeP").append(results);
+				        
+				        for(i in pocutjeTab) {
+				        	var pocutjePovp = (pocutjeTab[i]/res.length)*100;
+				        	pocutjeProc.push(pocutjePovp.toFixed(2));
+				        }
+				        
+				        showGraf("pocutje", pocutjeProc, pocutjeRazred);
 			    	} else {
-			    		alert("Ni podatkov o telesni temperaturi pacienta!");
+			    		alert("Ni podatkov o počutju pacienta!");
 			    	}
 			    },
 			    error: function() {
@@ -759,9 +770,6 @@ function pridobiPocutjePacienta(ehrId) {
 }
 
 function prilepiBmi() {
-	var results = "<table class='table table-striped " +
-    "table-hover'><tr><th>Razred BMI</th>" +
-    "<th class='text-right'>Povprečni BMI pacienta</th></tr>";
 	        for (var i in bmiTab) {
 	        	if(bmiTab[i] < 18.5)
 	        		bmiOsebka[0]++;
@@ -779,12 +787,9 @@ function prilepiBmi() {
 	        
 	        for(i = 0; i < 6; i++) {
 	        	povpBmi = (bmiOsebka[i]/bmiTab.length)*100;
-	        	results += "<tr><td>" + bmiRazred[i] +
-          "</td><td class='text-right'>" + povpBmi.toFixed(2) + " %" +
-          "</td>";
+	        	bmiProc.push(povpBmi.toFixed(2));
 	        }
-	        results += "</table>";
-	        $("#bmiP").append(results);
+	        showGraf("bmi", bmiProc, bmiRazred);
 }
 
 function preveri(knof) {
@@ -818,4 +823,76 @@ function preveri(knof) {
 		$("#poskodba").attr("checked", "checked");
 		document.getElementById("poskodba").checked = true;
 	}
+}
+
+function showGraf(imeApp, tabProc, tabRazred) {
+	var salesData =[];
+	var podatki=[];
+	
+	for(i in tabProc) {
+		if(tabProc[i] > 0) {
+			var color = getRandomColor();
+			var data1 = {color: color, value: tabProc[i]};
+			salesData.push(data1);
+			var podatki1 = {color: color, value: i};
+			podatki.push(podatki1);
+		}
+	}
+	
+	var svg = d3.select("#" + imeApp + "P").append("svg").attr("width",700).attr("height",300);
+	svg.append("g").attr("id","salesDonut");
+	Donut3D.draw("salesDonut", randomData(), 150, 150, 130, 100, 30, 0.4);
+	console.log(salesData);
+	console.log(podatki);
+	
+	
+	var results = "<table class='table table-striped " +
+                "table-hover'><tr><th>Legenda: </th>";
+	for(i in podatki) {
+		results += "<tr><td style='color:white; background-color:"+ podatki[i].color 
+		+ "'>" + tabRazred[podatki[i].value] +
+                      "</td>";
+	}
+	results += "</table>";
+	$("#" + imeApp + "L").append(results);
+	
+	
+	function randomData(){
+		return salesData.map(function(d){ 
+			return {value:d.value, color:d.color};});
+	}
+
+}
+
+/* RISANJE KROFA 
+
+var salesData=[
+	{label:"Basic", color:"#3366CC"},
+	{label:"Plus", color:"#DC3912"},
+	{label:"Lite", color:"#FF9900"},
+	{label:"Elite", color:"#109618"},
+	{label:"Delux", color:"#990099"}
+];
+
+var svg = d3.select("body").append("svg").attr("width",700).attr("height",300);
+
+svg.append("g").attr("id","salesDonut");
+svg.append("g").attr("id","quotesDonut");
+
+Donut3D.draw("salesDonut", randomData(), 150, 150, 130, 100, 30, 0.4);
+Donut3D.draw("quotesDonut", randomData(), 450, 150, 130, 100, 30, 0);
+	
+function changeData(){
+	Donut3D.transition("salesDonut", randomData(), 130, 100, 30, 0.4);
+	Donut3D.transition("quotesDonut", randomData(), 130, 100, 30, 0);
+}
+*/
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }

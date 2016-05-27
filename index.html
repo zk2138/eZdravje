@@ -15,6 +15,8 @@
   <script src="knjiznice/js/koda.js"></script>
   <script src="knjiznice/js/zemljevid.js"></script>
   <script src="knjiznice/js/generirajZacetek.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="knjiznice/js/Donut3D.js"></script>
 </head>
 <body onload="generirajZacetne3UporabnikeOnLoad(); naloziPaciente(); nacin(); preveri('1')">
 
@@ -280,7 +282,11 @@
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-12 col-md-12 col-sm-12" id="pocutjeP">
+                <div class="col-lg-6 col-md-6 col-sm-6" id="pocutjeP">
+                 
+                </div>
+                
+                <div class="col-lg-6 col-md-6 col-sm-6" id="pocutjeL">
                  
                 </div>
                 
@@ -296,13 +302,17 @@
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Bmi povprečje</h3>
+                <h3 class="panel-title">Bmi povprečje pacienta</h3>
             </div>
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-12 col-md-12 col-sm-12" id="bmiP">
-                 
+                <div class="col-lg-6 col-md-6 col-sm-6" id="bmiP">
+                  
+                </div>
+                
+                <div class="col-lg-6 col-md-6 col-sm-6" id="bmiL">
+                  
                 </div>
                 
               </div>
