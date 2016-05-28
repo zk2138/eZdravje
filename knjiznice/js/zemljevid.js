@@ -31,13 +31,13 @@ function getLocation(setup) {
         ustanove = "Prostočasne ustanove v bližini";
         $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
-    }else if(setup == 1) {
+    }else if(setup == 3) {
         type = ["hospital", "health"];
         rad = '1300';
         ustanove = "Zdravstvene ustanove v bližini";
         $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
-    } else if(setup == 2) {
+    } else if(setup == 1) {
         type = ["spa"];
         //type = ["cafe", "library"];
         rad = '3000';
@@ -45,7 +45,7 @@ function getLocation(setup) {
         $('#panel-title-zemljevid').text(ustanove);
         deleteMarkers();
         //console.log("neki dela");
-    } else if(setup == 3) {
+    } else if(setup == 2) {
         type = ["pharmacy", "physiotherapist", "dentist"];
         rad = '1800';
         ustanove = "Ustanove za pomoč v bližini";

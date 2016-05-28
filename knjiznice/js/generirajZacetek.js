@@ -47,26 +47,7 @@ function zacetniEHRzaPacienta(ime, priimek, datumRojstva) {
 function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, merilec, pocutje) {
 	//console.log("klic funkcije");
 	sessionId = getSessionId();
-	/*
-	var ehrId = $("#dodajVitalnoEHR").val();
-	var datumInUra = $("#dodajVitalnoDatumInUra").val();
-	var telesnaVisina = $("#dodajVitalnoTelesnaVisina").val();
-	var telesnaTeza = $("#dodajVitalnoTelesnaTeza").val();
-	var telesnaTemperatura = $("#dodajVitalnoTelesnaTemperatura").val();
-	var sistolicniKrvniTlak = $("#dodajVitalnoKrvniTlakSistolicni").val();
-	var diastolicniKrvniTlak = $("#dodajVitalnoKrvniTlakDiastolicni").val();
-	var nasicenostKrviSKisikom = $("#dodajVitalnoNasicenostKrviSKisikom").val();
-	var merilec = $("#dodajVitalnoMerilec").val();
-	*/
-	
-	//var datumInUra = "1975-06-13T01:25";
-	//var telesnaVisina = "175";
-	//var telesnaTeza = "60.00"
-	//var telesnaTemperatura = "36.30";
-	//var sistolicniKrvniTlak = "120";
-	//var diastolicniKrvniTlak = "60";
-	//var nasicenostKrviSKisikom = "95";
-	//var merilec = "Micka";
+
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloM").html("<span class='obvestilo " +
       "label label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
@@ -102,7 +83,7 @@ function zacetneMeritve(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTe
 		    contentType: 'application/json',
 		    data: JSON.stringify(podatki),
 		    success: function (res) {
-		    	console.log("Uspešno kreiran uporabnik z EHRID " + ehrId);
+		    	//console.log("Uspešno kreiran uporabnik z EHRID " + ehrId);
 		    },
 		    error: function(err) {
 		    	$("#sporociloM").html(

@@ -36,7 +36,7 @@
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li onclick = "generirajZacetne3Uporabnike()"><a href="#">Generiranje podatkov</a></li>
+          <li onclick = "generirajZacetne3Uporabnike(); naloziPaciente();"><a href="#">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -153,9 +153,9 @@
                   <form action="">
                     <span class="label label-default">Počutje</span><br>
                     <input type="radio" name="optradio" id="kNov" onclick="getLocation(0); preveri('1')"><strong>     Spočit</strong>
-                    <input type="radio" name="optradio" id="utrujen" onclick="getLocation(2); preveri('2')"><strong>     Utrujen</strong>
-                    <input type="radio" name="optradio" id="bolecina" onclick="getLocation(3); preveri('3')"><strong>     Bolečina</strong>
-                    <input type="radio" name="optradio" id="poskodba" onclick="getLocation(1); preveri('4')"><strong>     Poškodba</strong>
+                    <input type="radio" name="optradio" id="utrujen" onclick="getLocation(1); preveri('2')"><strong>     Utrujen</strong>
+                    <input type="radio" name="optradio" id="bolecina" onclick="getLocation(2); preveri('3')"><strong>     Bolečina</strong>
+                    <input type="radio" name="optradio" id="poskodba" onclick="getLocation(3); preveri('4')"><strong>     Poškodba</strong>
                   </form>
                   <button type="button" class="vpisiMeritevPacient" onclick="dodajMeritve();">Vpiši podatke meritve za pacienta</button><span id="sporociloM"></span>
                 </div>
@@ -230,11 +230,11 @@
             <div class="panel-body">
               <div class="row">
                 
-                <div class="col-lg-6 col-md-6 col-sm-6" id="sisTlakP">
+                <div class="col-lg-6 col-md-6 col-sm-6" id="tlakP">
                  
                 </div>
                 
-                 <div class="col-lg-6 col-md-6 col-sm-6" id="diaTlakP">
+                 <div class="col-lg-6 col-md-6 col-sm-6" id="tlakL">
                   
                 </div>
                 
