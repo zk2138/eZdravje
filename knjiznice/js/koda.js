@@ -33,8 +33,9 @@ var pocutjeProc=[];
 var tlakTab = [];
 var tlakProc = [];
 
-var bmiRazred = ["< 18.5 BMI (Underweight)", "18.5 - 24.99 BMI (Normal Weight)", "25 - 29.99 BMI (Overweight)", "30 - 34.99 BMI (Obesity (Class 1))", "35 - 39.99 BMI (Obesity (Class 2))", ">= 40 BMI (Morbid Obesity)"];
-var tlakRazred = ["70/40 - 90/60 mmHg (Low blood pressure)", "90/60 - 120/80 mmHg (Normal blood pressure)", "120/80 - 140/90 mmHg (Pre-high blood pressure)", "140/90 - 190/100 mmHg (High blood pressure)"];
+var bmiRazred = ["< 18.5 BMI (teža pod normalo)", "18.5 - 24.99 BMI (normalna teža)", "25 - 29.99 BMI (zvišana teža)", "30 - 34.99 BMI (debelost razred I)", 
+"35 - 39.99 BMI (debelost razred II)", ">= 40 BMI (debelost razred III )"];
+var tlakRazred = ["70/40 - 90/60 mmHg (Nizek krvni tlak)", "90/60 - 120/80 mmHg (Normalen krvni tlak)", "120/80 - 140/90 mmHg (Visoko normalen krvni tlak)", "140/90 - 190/100 mmHg (Visok krvni tlak)"];
 var pocutjeRazred=["Spočit", "Utrujen", "Bolečina", "Poškodba"];
 var bmiOsebka = [0, 0, 0, 0, 0, 0];
 var pocutjeTab=[0, 0, 0, 0];
@@ -78,8 +79,7 @@ function generirajZacetne3Uporabnike() {
         ehr = generirajPodatke(i);
         console.log(ehr);
         ehrIdTemp.push(ehr);
-        ehrIdTab[i-1] = {};
-        ehrIdTab[i-1] = ehr;
+        ehrIdTab.push(ehr);
     }
     console.log(ehrIdTab.length);
     /*
