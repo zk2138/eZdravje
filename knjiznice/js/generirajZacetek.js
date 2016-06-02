@@ -2,7 +2,7 @@ function zacetniEHRzaPacienta(ime, priimek, datumRojstva) {
 	sessionId = getSessionId();
     var ehrId = null;
 	
-	console.log(ime + " " + priimek + " " + datumRojstva);
+	//console.log(ime + " " + priimek + " " + datumRojstva);
 
 	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
       priimek.trim().length == 0 || datumRojstva.trim().length == 0) {

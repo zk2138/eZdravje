@@ -25,6 +25,8 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
+var podatkiPac;
+
 var ehrIdTemp = [];
 var ehrIdTab = [];
 var bmiTab = [];
@@ -101,8 +103,6 @@ function generirajZacetne3Uporabnike() {
     }, 15000);
 }
 
-var podatkiPac;
-
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
  * generiranju podatkov je potrebno najprej kreirati novega pacienta z
@@ -145,7 +145,7 @@ function generirajPodatke(stPacienta) {
 
 function EHRzaPacienta() {
 	sessionId = getSessionId();
-  var ehrId = null;
+	var ehrId = null;
 	var ime = $("#vpisiIme").val();
 	var priimek = $("#vpisiPriimek").val();
 	var datumRojstva = $("#vpisiDatumR").val();
@@ -265,9 +265,6 @@ function pridobiEhrPacienta() {
  */
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
-function izbiraNacina() {
-    document.getElementById("nacin").classList.toggle("show");
-}
 
 function izbiraPacienta() {
     document.getElementById("pacient").classList.toggle("show");
@@ -857,29 +854,6 @@ function showGraf(imeApp, tabProc, tabRazred) {
 
 }
 
-/* RISANJE KROFA 
-
-var salesData=[
-	{label:"Basic", color:"#3366CC"},
-	{label:"Plus", color:"#DC3912"},
-	{label:"Lite", color:"#FF9900"},
-	{label:"Elite", color:"#109618"},
-	{label:"Delux", color:"#990099"}
-];
-
-var svg = d3.select("body").append("svg").attr("width",700).attr("height",300);
-
-svg.append("g").attr("id","salesDonut");
-svg.append("g").attr("id","quotesDonut");
-
-Donut3D.draw("salesDonut", randomData(), 150, 150, 130, 100, 30, 0.4);
-Donut3D.draw("quotesDonut", randomData(), 450, 150, 130, 100, 30, 0);
-	
-function changeData(){
-	Donut3D.transition("salesDonut", randomData(), 130, 100, 30, 0.4);
-	Donut3D.transition("quotesDonut", randomData(), 130, 100, 30, 0);
-}
-*/
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
