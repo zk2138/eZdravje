@@ -354,6 +354,7 @@ function nacin() {
   $("#prikazPodatkov1").hide();
   $("#prikazPodatkov2").hide();
   $("#prikazPodatkov3").hide();
+  $("#pacienti").show();
   $("#vrniGumb").hide();
 }
 
