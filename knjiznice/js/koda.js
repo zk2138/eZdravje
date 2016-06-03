@@ -157,6 +157,11 @@ function EHRzaPacienta() {
       priimek.trim().length == 0 || datumRojstva.trim().length == 0) {
 		$("#sporociloP").html("<span class='obvestilo label " +
       "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+      
+    	setTimeout(function() {
+          $('#sporociloP').html('');
+        }, 15000);
+      
 	} else {
 		$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
@@ -199,6 +204,11 @@ function EHRzaPacienta() {
 		            	$("#sporociloP").html("<span class='obvestilo label " +
                     "label-danger fade-in'>Napaka '" +
                     JSON.parse(err.responseText).userMessage + "'!");
+                    
+                    setTimeout(function() {
+			          $('#sporociloP').html('');
+			        }, 15000);
+                    
 		            }
 		        });
 		    }
@@ -221,6 +231,10 @@ function pridobiEhrPacienta() {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -249,9 +263,13 @@ function pridobiEhrPacienta() {
         }, 15000);
 			},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#vrnisporociloP").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+          setTimeout(function() {
+          $('#vrnisporociloP').html('');
+        }, 15000);
 			}
 		});
 	}
@@ -304,6 +322,7 @@ function naloziPodatke() {
   //console.log("nalagam podatke");
   $("#vnosPodatkov1").hide();
   $("#vnosPodatkov2").hide();
+  $("#pacienti").hide();
   $("#prikazPodatkov1").show();
   $("#prikazPodatkov2").show();
   $("#prikazPodatkov3").show();
@@ -371,6 +390,10 @@ function dodajMeritve() {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloM").html("<span class='obvestilo " +
       "label label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+      
+      setTimeout(function() {
+          $('#sporociloM').html('');
+        }, 15000);
 	} else {
 		$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
@@ -425,6 +448,10 @@ function dodajMeritve() {
 		    	$("#sporociloM").html(
             "<span class='obvestilo label label-danger fade-in'>Napaka '" +
             JSON.parse(err.responseText).userMessage + "'!");
+            
+	            setTimeout(function() {
+		          $('#sporociloM').html('');
+		        }, 15000);
 		    }
 		});
 	}
@@ -436,6 +463,11 @@ function pridobiVisinoPacienta(ehrId) {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
+        
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -473,9 +505,14 @@ function pridobiVisinoPacienta(ehrId) {
 			  });
 	    	},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+          setTimeout(function() {
+	          $('#sporociloB').html('');
+	        }, 15000);
+        
 			}
 		});	
 	}
@@ -486,6 +523,10 @@ function pridobiTezoPacienta(ehrId, resV) {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -527,9 +568,14 @@ function pridobiTezoPacienta(ehrId, resV) {
 				pridobiTlakPacienta(ehrId);
 			},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+          setTimeout(function() {
+	          $('#sporociloB').html('');
+	        }, 15000);
+	        
 			}
 		});
 	}
@@ -547,6 +593,11 @@ function pridobiTlakPacienta(ehrId) {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
+      
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -581,9 +632,14 @@ function pridobiTlakPacienta(ehrId) {
 					
 			},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+          setTimeout(function() {
+	          $('#sporociloB').html('');
+	        }, 15000);
+          
 			}
 		});
 	}
@@ -616,6 +672,11 @@ function pridobiTempKisikPacienta(ehrId) {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
+        
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -680,9 +741,14 @@ function pridobiTempKisikPacienta(ehrId) {
 			  
 			},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+        	setTimeout(function() {
+		          $('#sporociloB').html('');
+		        }, 15000);
+          
 			}
 		});
 	}
@@ -694,6 +760,11 @@ function pridobiPocutjePacienta(ehrId) {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#sporociloB").html("<span class='obvestilo label label-warning " +
       "fade-in'>Prosim vnesite zahtevan podatek!");
+      
+      setTimeout(function() {
+          $('#sporociloB').html('');
+        }, 15000);
+      
 	} else {
 		$.ajax({
 			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -749,9 +820,14 @@ function pridobiPocutjePacienta(ehrId) {
 			  
 			},
 			error: function(err) {
-				$("#preberiSporocilo").html("<span class='obvestilo label " +
+				$("#sporociloB").html("<span class='obvestilo label " +
           "label-danger fade-in'>Napaka '" +
           JSON.parse(err.responseText).userMessage + "'!");
+          
+          setTimeout(function() {
+	          $('#sporociloB').html('');
+	        }, 15000);
+          
 			}
 		});
 	}
