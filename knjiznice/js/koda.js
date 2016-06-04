@@ -326,6 +326,16 @@ function naloziPodatke() {
   $("#prikazPodatkov1").show();
   $("#prikazPodatkov2").show();
   $("#prikazPodatkov3").show();
+  $("#visinaP").hide();
+  $("#telesnaTezaP").hide();
+  $("#tlakP").hide();
+  $("#tlakL").hide();
+  $("#temperaturaP").hide();
+  $("#kisikVKrviP").hide();
+  $("#pocutjeP").hide();
+  $("#pocutjeL").hide();
+  $("#bmiP").hide();
+  $("#bmiL").hide();
   $("#vrniGumb").show();
 }
 
@@ -939,4 +949,11 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+function spremeniTekst(idButton) {
+	if($("#"+idButton).val() == 'Prikaži')
+		$("#"+idButton).val('Skrij');
+	else if($("#"+idButton).val() == 'Skrij')
+		$("#"+idButton).val('Prikaži');
 }
